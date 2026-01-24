@@ -159,12 +159,6 @@
             margin-bottom: 8px;
         }
         
-        .package-details {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.5;
-        }
-        
         .addon-options {
             margin-top: 15px;
         }
@@ -350,12 +344,6 @@
             </div>
         </div>
         
-        <!-- Customer Type Check -->
-        <div id="customerTypeSection" class="section">
-            <h2 id="welcomeText">ยินดีต้อนรับ!</h2>
-            <p id="customerTypeText"></p>
-        </div>
-        
         <!-- New Customer Registration -->
         <div id="newCustomerSection" class="section">
             <h2 id="registerTitle">ลงทะเบียนลูกค้าใหม่</h2>
@@ -420,26 +408,22 @@
                 </select>
             </div>
             
-            <!-- Package Options -->
             <div id="packageOptions" class="hidden">
                 <h3 id="packageTitle">เลือก Package</h3>
                 <div class="package-grid" id="packageGrid"></div>
                 
-                <!-- Add-on Services -->
                 <div id="addonSection" class="hidden">
                     <h3 id="addonTitle" style="margin-top: 25px;">บริการเสริม (เลือกได้)</h3>
                     <div class="addon-options" id="addonOptions"></div>
                 </div>
             </div>
             
-            <!-- Per Piece Note -->
             <div id="perpieceNote" class="hidden">
                 <div class="instructions">
                     <p id="perpieceText">สำหรับบริการแบบรายชิ้น ทางร้านจะคิดราคาตามจำนวนผ้าที่ส่งมาจริง ตามตารางอัตราค่าบริการ</p>
                 </div>
             </div>
             
-            <!-- Price Summary -->
             <div id="priceSummary" class="price-summary hidden">
                 <div class="price-row">
                     <span id="summaryPackage">Package:</span>
@@ -455,7 +439,6 @@
                 </div>
             </div>
             
-            <!-- Image Upload -->
             <div class="form-group">
                 <label id="labelImage">ถ่ายรูปถุงผ้า *</label>
                 <div class="image-upload" onclick="document.getElementById('imageInput').click()">
@@ -493,16 +476,10 @@
 
     <script>
         // ==========================================
-        // ⚠️ สำคัญ! แก้ไข 2 ค่านี้ให้ถูกต้อง
+        // Configuration
         // ==========================================
-        
-        // 1. ใส่ Google Apps Script Web App URL
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxKmvMjrhlM-1GaZNzBhim-CqrKwhgvqouLHEo-KcwFwDUQGT6MCssqkuAil1Cu6Qm_Zw/exec';
-        
-        // 2. ใส่ LIFF ID
         const LIFF_ID = '2008959129-6kAJzyzg';
-        
-        // ==========================================
         
         // Global Variables
         let currentLanguage = 'th';
@@ -516,13 +493,12 @@
         let longitude = null;
         let uploadedImageBase64 = null;
         
-        // Language Pack
+        // Language Pack (รวมภาษาทั้งหมด - ย่อเพื่อประหยัดที่)
         const lang = {
             th: {
                 mainTitle: 'ใช้บริการซักรีด',
                 subtitle: 'เลือกบริการที่ต้องการ',
                 loadingText: 'กำลังโหลด...',
-                welcomeText: 'ยินดีต้อนรับ!',
                 registerTitle: 'ลงทะเบียนลูกค้าใหม่',
                 labelRoomNumber: 'หมายเลขห้อง / เลขที่บ้าน *',
                 labelLocationName: 'ชื่อคอนโด / หมู่บ้าน *',
@@ -533,16 +509,10 @@
                 btnRegister: 'ลงทะเบียน',
                 serviceTitle: 'เลือกบริการ',
                 instructionsTitle: '📋 วิธีการส่งผ้า',
-                instruction1: 'เตรียมไม้แขวนเสื้อ สำหรับเสื้อผ้าที่ต้องการให้แขวน',
-                instruction2: 'หากต้องการให้พับ ไม่ต้องเตรียมไม้แขวน',
-                instruction3: 'ถุงคลุมผ้าที่มีหมายเลขห้องสามารถใส่ผ้าใช้แล้วส่งกลับได้',
                 labelServiceType: 'ประเภทบริการ *',
-                selectServiceType: '-- เลือกประเภทบริการ --',
-                packageType: 'แบบ Package',
-                perpieceType: 'แบบรายชิ้น',
                 packageTitle: 'เลือก Package',
                 addonTitle: 'บริการเสริม (เลือกได้)',
-                perpieceText: 'สำหรับบริการแบบรายชิ้น ทางร้านจะคิดราคาตามจำนวนผ้าที่ส่งมาจริง ตามตารางอัตราค่าบริการ',
+                perpieceText: 'สำหรับบริการแบบรายชิ้น ทางร้านจะคิดราคาตามจำนวนผ้าที่ส่งมาจริง',
                 summaryPackage: 'Package:',
                 summaryAddon: 'บริการเสริม:',
                 summaryTotal: 'รวมทั้งหมด:',
@@ -559,7 +529,6 @@
                 mainTitle: 'Laundry Service',
                 subtitle: 'Select your service',
                 loadingText: 'Loading...',
-                welcomeText: 'Welcome!',
                 registerTitle: 'New Customer Registration',
                 labelRoomNumber: 'Room / House Number *',
                 labelLocationName: 'Condo / Village Name *',
@@ -570,20 +539,14 @@
                 btnRegister: 'Register',
                 serviceTitle: 'Select Service',
                 instructionsTitle: '📋 How to Send Laundry',
-                instruction1: 'Prepare hangers for clothes you want hung',
-                instruction2: 'If you want folded, no hangers needed',
-                instruction3: 'You can reuse the plastic bag with your room number',
                 labelServiceType: 'Service Type *',
-                selectServiceType: '-- Select Service Type --',
-                packageType: 'Package',
-                perpieceType: 'Per Piece',
                 packageTitle: 'Select Package',
                 addonTitle: 'Add-on Services (Optional)',
-                perpieceText: 'For per-piece service, charges are based on actual items according to our price list',
+                perpieceText: 'For per-piece service, charges are based on actual items',
                 summaryPackage: 'Package:',
                 summaryAddon: 'Add-on:',
                 summaryTotal: 'Total:',
-                labelImage: 'Take Photo of Laundry Bag *',
+                labelImage: 'Take Photo *',
                 uploadText: '📸 Click to Take Photo',
                 labelNotes: 'Additional Notes',
                 btnSubmit: 'Submit Order',
@@ -597,20 +560,20 @@
         // Package Data
         const packages = {
             th: [
-                { id: 'wash_iron_50', name: 'ซัก+รีด 50 ชิ้น', price: 800, size: 50, type: 'wash_iron' },
-                { id: 'wash_iron_100', name: 'ซัก+รีด 100 ชิ้น', price: 1600, size: 100, type: 'wash_iron', badge: 'แถมซักผ้านวมฟรี 1 ผืน' },
-                { id: 'iron_50', name: 'รีด 50 ชิ้น', price: 600, size: 50, type: 'iron' },
-                { id: 'iron_100', name: 'รีด 100 ชิ้น', price: 1180, size: 100, type: 'iron' },
-                { id: 'wash_dry_50', name: 'ซัก+อบ 50 ชิ้น', price: 450, size: 50, type: 'wash_dry' },
-                { id: 'wash_dry_100', name: 'ซัก+อบ 100 ชิ้น', price: 880, size: 100, type: 'wash_dry' }
+                { id: 'wash_iron_50', name: 'ซัก+รีด 50 ชิ้น', price: 800, size: 50 },
+                { id: 'wash_iron_100', name: 'ซัก+รีด 100 ชิ้น', price: 1600, size: 100, badge: 'แถมซักผ้านวมฟรี' },
+                { id: 'iron_50', name: 'รีด 50 ชิ้น', price: 600, size: 50 },
+                { id: 'iron_100', name: 'รีด 100 ชิ้น', price: 1180, size: 100 },
+                { id: 'wash_dry_50', name: 'ซัก+อบ 50 ชิ้น', price: 450, size: 50 },
+                { id: 'wash_dry_100', name: 'ซัก+อบ 100 ชิ้น', price: 880, size: 100 }
             ],
             en: [
-                { id: 'wash_iron_50', name: 'Wash+Iron 50 pcs', price: 800, size: 50, type: 'wash_iron' },
-                { id: 'wash_iron_100', name: 'Wash+Iron 100 pcs', price: 1600, size: 100, type: 'wash_iron', badge: 'Free blanket wash' },
-                { id: 'iron_50', name: 'Iron Only 50 pcs', price: 600, size: 50, type: 'iron' },
-                { id: 'iron_100', name: 'Iron Only 100 pcs', price: 1180, size: 100, type: 'iron' },
-                { id: 'wash_dry_50', name: 'Wash+Dry 50 pcs', price: 450, size: 50, type: 'wash_dry' },
-                { id: 'wash_dry_100', name: 'Wash+Dry 100 pcs', price: 880, size: 100, type: 'wash_dry' }
+                { id: 'wash_iron_50', name: 'Wash+Iron 50 pcs', price: 800, size: 50 },
+                { id: 'wash_iron_100', name: 'Wash+Iron 100 pcs', price: 1600, size: 100, badge: 'Free blanket' },
+                { id: 'iron_50', name: 'Iron 50 pcs', price: 600, size: 50 },
+                { id: 'iron_100', name: 'Iron 100 pcs', price: 1180, size: 100 },
+                { id: 'wash_dry_50', name: 'Wash+Dry 50 pcs', price: 450, size: 50 },
+                { id: 'wash_dry_100', name: 'Wash+Dry 100 pcs', price: 880, size: 100 }
             ]
         };
         
@@ -625,165 +588,80 @@
                 { id: 'both_100', name: 'ซักแยก+ซักมือ (100 ชิ้น)', price: 500, size: 100 }
             ],
             en: [
-                { id: 'separate_50', name: 'Separate Wash (50 pcs)', price: 150, size: 50 },
-                { id: 'separate_100', name: 'Separate Wash (100 pcs)', price: 300, size: 100 },
-                { id: 'hand_wash_50', name: 'Hand Wash (50 pcs)', price: 150, size: 50 },
-                { id: 'hand_wash_100', name: 'Hand Wash (100 pcs)', price: 300, size: 100 },
-                { id: 'both_50', name: 'Separate+Hand Wash (50 pcs)', price: 250, size: 50 },
-                { id: 'both_100', name: 'Separate+Hand Wash (100 pcs)', price: 500, size: 100 }
+                { id: 'separate_50', name: 'Separate Wash (50)', price: 150, size: 50 },
+                { id: 'separate_100', name: 'Separate Wash (100)', price: 300, size: 100 },
+                { id: 'hand_wash_50', name: 'Hand Wash (50)', price: 150, size: 50 },
+                { id: 'hand_wash_100', name: 'Hand Wash (100)', price: 300, size: 100 },
+                { id: 'both_50', name: 'Both (50)', price: 250, size: 50 },
+                { id: 'both_100', name: 'Both (100)', price: 500, size: 100 }
             ]
         };
         
         // Initialize LIFF
         window.onload = function() {
             console.log('Initializing LIFF...');
-            console.log('LIFF ID:', LIFF_ID);
-            console.log('GAS URL:', GAS_URL);
-            
-            // ตรวจสอบว่าได้แก้ไข Config หรือยัง
-            if (LIFF_ID === 'YOUR_LIFF_ID_HERE' || GAS_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
-                showError('กรุณาแก้ไข LIFF_ID และ GAS_URL ในโค้ดก่อนใช้งาน');
-                return;
-            }
             
             liff.init({ liffId: LIFF_ID })
                 .then(() => {
-                    console.log('LIFF initialized successfully');
+                    console.log('LIFF initialized');
                     if (!liff.isLoggedIn()) {
-                        console.log('Not logged in, redirecting to login...');
                         liff.login();
                     } else {
-                        console.log('Already logged in');
                         initializeApp();
                     }
                 })
                 .catch((err) => {
                     console.error('LIFF init failed:', err);
-                    showError('เกิดข้อผิดพลาดในการเชื่อมต่อ LINE: ' + err.message);
+                    showError('เกิดข้อผิดพลาดในการเชื่อมต่อ LINE');
                 });
         };
         
+        // ฟังก์ชันเรียก API ด้วย GET method พร้อมพารามิเตอร์
+        async function callGoogleAPI(params) {
+            const queryParams = new URLSearchParams(params).toString();
+            const url = `${GAS_URL}?${queryParams}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+                
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('API call error:', error);
+                throw error;
+            }
+        }
+        
         async function initializeApp() {
             try {
-                console.log('Getting profile...');
                 const profile = await liff.getProfile();
                 userId = profile.userId;
                 displayName = profile.displayName;
-                console.log('Profile:', { userId, displayName });
+                console.log('Profile loaded:', displayName);
                 
-                console.log('Checking customer status...');
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'checkCustomer',
-                        userId: userId
-                    })
+                // เช็คสถานะลูกค้า
+                const data = await callGoogleAPI({
+                    action: 'checkCustomer',
+                    userId: userId
                 });
                 
-                console.log('Response status:', response.status);
-                const data = await response.json();
-                console.log('Response data:', data);
+                console.log('Customer status:', data);
                 
-                if (data.success) {
-                    isNewCustomer = data.data.isNewCustomer;
-                    
-                    if (!isNewCustomer) {
-                        customerData = data.data.customerData;
-                        currentLanguage = customerData.language || 'th';
-                        setLanguage(currentLanguage);
-                        showSection('serviceSection');
-                    } else {
-                        showSection('newCustomerSection');
-                    }
+                if (data.success && data.data.isNewCustomer) {
+                    showSection('newCustomerSection');
+                } else if (data.success) {
+                    customerData = data.data.customerData;
+                    currentLanguage = customerData.language || 'th';
+                    showSection('serviceSection');
                 } else {
-                    showError('เกิดข้อผิดพลาด: ' + data.message);
+                    showError('ไม่สามารถโหลดข้อมูลได้');
                 }
             } catch (error) {
-                console.error('Error in initializeApp:', error);
-                showError('เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + error.message);
-            }
-        }
-        
-        function showError(message) {
-            document.getElementById('errorMessage').textContent = message;
-            showSection('errorSection');
-        }
-        
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            updateLanguage();
-            
-            // Update language buttons
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent === (lang === 'th' ? 'ไทย' : 'English')) {
-                    btn.classList.add('active');
-                }
-            });
-        }
-        
-        function updateLanguage() {
-            const l = lang[currentLanguage];
-            
-            Object.keys(l).forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    element.textContent = l[key];
-                }
-            });
-            
-            // Update instructions list
-            const instructionsList = document.getElementById('instructionsList');
-            if (instructionsList) {
-                instructionsList.innerHTML = `
-                    <li>${l.instruction1}</li>
-                    <li>${l.instruction2}</li>
-                    <li>${l.instruction3}</li>
-                `;
-            }
-            
-            // Update service type options
-            const serviceTypeSelect = document.getElementById('serviceType');
-            if (serviceTypeSelect) {
-                serviceTypeSelect.innerHTML = `
-                    <option value="">${l.selectServiceType}</option>
-                    <option value="package">${l.packageType}</option>
-                    <option value="perpiece">${l.perpieceType}</option>
-                `;
-            }
-        }
-        
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
-        }
-        
-        async function getLocation() {
-            if (navigator.geolocation) {
-                document.getElementById('locationStatus').textContent = 'กำลังดึงตำแหน่ง...';
-                
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        latitude = position.coords.latitude;
-                        longitude = position.coords.longitude;
-                        
-                        document.getElementById('locationStatus').textContent = 
-                            `✓ ตำแหน่ง: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-                        document.getElementById('locationStatus').style.color = '#4caf50';
-                    },
-                    (error) => {
-                        document.getElementById('locationStatus').textContent = 
-                            '✗ ไม่สามารถดึงตำแหน่งได้ กรุณาอนุญาตการเข้าถึงตำแหน่ง';
-                        document.getElementById('locationStatus').style.color = '#ff6b6b';
-                    }
-                );
-            } else {
-                alert('เบราว์เซอร์ของคุณไม่รองรับ Geolocation');
+                console.error('Init error:', error);
+                showError('เกิดข้อผิดพลาด: ' + error.message);
             }
         }
         
@@ -806,166 +684,28 @@
             try {
                 showSection('loadingSection');
                 
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'registerCustomer',
-                        userId: userId,
-                        displayName: displayName,
-                        roomNumber: roomNumber,
-                        locationName: locationName,
-                        locationType: locationType,
-                        latitude: latitude,
-                        longitude: longitude,
-                        pickupPoint: pickupPoint,
-                        language: currentLanguage
-                    })
+                const data = await callGoogleAPI({
+                    action: 'registerCustomer',
+                    userId,
+                    displayName,
+                    roomNumber,
+                    locationName,
+                    locationType,
+                    latitude,
+                    longitude,
+                    pickupPoint,
+                    language: currentLanguage
                 });
                 
-                const data = await response.json();
-                
                 if (data.success) {
-                    isNewCustomer = false;
-                    customerData = {
-                        roomNumber: roomNumber,
-                        locationName: locationName,
-                        locationType: locationType,
-                        pickupPoint: pickupPoint
-                    };
-                    
+                    customerData = { roomNumber, locationName, locationType, pickupPoint };
                     showSection('serviceSection');
                 } else {
                     showError('เกิดข้อผิดพลาด: ' + data.message);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showError('เกิดข้อผิดพลาดในการลงทะเบียน: ' + error.message);
+                showError('เกิดข้อผิดพลาด: ' + error.message);
             }
-        }
-        
-        function updateServiceOptions() {
-            const serviceType = document.getElementById('serviceType').value;
-            
-            document.getElementById('packageOptions').classList.add('hidden');
-            document.getElementById('perpieceNote').classList.add('hidden');
-            document.getElementById('priceSummary').classList.add('hidden');
-            
-            if (serviceType === 'package') {
-                document.getElementById('packageOptions').classList.remove('hidden');
-                renderPackages();
-            } else if (serviceType === 'perpiece') {
-                document.getElementById('perpieceNote').classList.remove('hidden');
-            }
-        }
-        
-        function renderPackages() {
-            const grid = document.getElementById('packageGrid');
-            grid.innerHTML = '';
-            
-            packages[currentLanguage].forEach(pkg => {
-                const card = document.createElement('div');
-                card.className = 'package-card';
-                card.onclick = () => selectPackage(pkg, card);
-                
-                card.innerHTML = `
-                    ${pkg.badge ? `<span class="badge">${pkg.badge}</span>` : ''}
-                    <div class="package-title">${pkg.name}</div>
-                    <div class="package-price">${pkg.price} ฿</div>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-        
-        function selectPackage(pkg, cardElement) {
-            selectedPackage = pkg;
-            selectedAddon = null;
-            
-            document.querySelectorAll('.package-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            cardElement.classList.add('selected');
-            
-            document.getElementById('addonSection').classList.remove('hidden');
-            renderAddons(pkg.size);
-            updatePriceSummary();
-        }
-        
-        function renderAddons(packageSize) {
-            const container = document.getElementById('addonOptions');
-            container.innerHTML = '';
-            
-            const filteredAddons = addons[currentLanguage].filter(addon => addon.size === packageSize);
-            
-            filteredAddons.forEach(addon => {
-                const card = document.createElement('div');
-                card.className = 'addon-card';
-                card.onclick = () => selectAddon(addon, card);
-                
-                card.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>${addon.name}</span>
-                        <span style="font-weight: 700; color: #667eea;">+${addon.price} ฿</span>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
-        
-        function selectAddon(addon, cardElement) {
-            if (selectedAddon && selectedAddon.id === addon.id) {
-                selectedAddon = null;
-                cardElement.classList.remove('selected');
-            } else {
-                selectedAddon = addon;
-                document.querySelectorAll('.addon-card').forEach(card => {
-                    card.classList.remove('selected');
-                });
-                cardElement.classList.add('selected');
-            }
-            
-            updatePriceSummary();
-        }
-        
-        function updatePriceSummary() {
-            if (!selectedPackage) return;
-            
-            const summary = document.getElementById('priceSummary');
-            summary.classList.remove('hidden');
-            
-            let totalPrice = selectedPackage.price;
-            
-            document.getElementById('summaryPackagePrice').textContent = selectedPackage.price + ' ฿';
-            
-            const addonRow = document.getElementById('addonRow');
-            if (selectedAddon) {
-                addonRow.classList.remove('hidden');
-                document.getElementById('summaryAddonPrice').textContent = '+' + selectedAddon.price + ' ฿';
-                totalPrice += selectedAddon.price;
-            } else {
-                addonRow.classList.add('hidden');
-            }
-            
-            document.getElementById('summaryTotalPrice').textContent = totalPrice + ' ฿';
-        }
-        
-        function handleImageSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedImageBase64 = e.target.result;
-                const preview = document.getElementById('imagePreview');
-                preview.src = uploadedImageBase64;
-                preview.classList.remove('hidden');
-                document.getElementById('uploadText').textContent = '✓ เลือกรูปแล้ว (คลิกเพื่อเปลี่ยน)';
-            };
-            reader.readAsDataURL(file);
         }
         
         async function submitOrder() {
@@ -986,31 +726,21 @@
                 return;
             }
             
-            const orderData = {
-                action: 'submitOrder',
-                userId: userId,
-                roomNumber: isNewCustomer ? document.getElementById('roomNumber').value : customerData.roomNumber,
-                locationName: isNewCustomer ? document.getElementById('locationName').value : customerData.locationName,
-                serviceType: serviceType,
-                packageType: selectedPackage ? selectedPackage.id : 'perpiece',
-                addOnService: selectedAddon ? selectedAddon.id : '',
-                totalPrice: selectedPackage ? (selectedPackage.price + (selectedAddon ? selectedAddon.price : 0)) : 0,
-                imageUrl: uploadedImageBase64.substring(0, 1000), // จำกัดขนาดรูป
-                notes: document.getElementById('orderNotes').value
-            };
-            
             try {
                 showSection('loadingSection');
                 
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(orderData)
+                const data = await callGoogleAPI({
+                    action: 'submitOrder',
+                    userId,
+                    roomNumber: customerData.roomNumber,
+                    locationName: customerData.locationName,
+                    serviceType,
+                    packageType: selectedPackage ? selectedPackage.id : 'perpiece',
+                    addOnService: selectedAddon ? selectedAddon.id : '',
+                    totalPrice: selectedPackage ? (selectedPackage.price + (selectedAddon ? selectedAddon.price : 0)) : 0,
+                    imageUrl: uploadedImageBase64.substring(0, 500),
+                    notes: document.getElementById('orderNotes').value
                 });
-                
-                const data = await response.json();
                 
                 if (data.success) {
                     document.getElementById('orderIdText').textContent = 
@@ -1020,9 +750,135 @@
                     showError('เกิดข้อผิดพลาด: ' + data.message);
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showError('เกิดข้อผิดพลาดในการส่งคำสั่งซื้อ: ' + error.message);
+                showError('เกิดข้อผิดพลาด: ' + error.message);
             }
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            showSection('errorSection');
+        }
+        
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((lang === 'th' && btn.textContent === 'ไทย') || 
+                    (lang === 'en' && btn.textContent === 'English')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+        
+        function getLocation() {
+            if (navigator.geolocation) {
+                document.getElementById('locationStatus').textContent = 'กำลังดึงตำแหน่ง...';
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        latitude = pos.coords.latitude;
+                        longitude = pos.coords.longitude;
+                        document.getElementById('locationStatus').textContent = 
+                            `✓ ตำแหน่ง: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+                        document.getElementById('locationStatus').style.color = '#4caf50';
+                    },
+                    () => {
+                        document.getElementById('locationStatus').textContent = '✗ ไม่สามารถดึงตำแหน่งได้';
+                        document.getElementById('locationStatus').style.color = '#ff6b6b';
+                    }
+                );
+            }
+        }
+        
+        function updateServiceOptions() {
+            const serviceType = document.getElementById('serviceType').value;
+            document.getElementById('packageOptions').classList.toggle('hidden', serviceType !== 'package');
+            document.getElementById('perpieceNote').classList.toggle('hidden', serviceType !== 'perpiece');
+            if (serviceType === 'package') renderPackages();
+        }
+        
+        function renderPackages() {
+            const grid = document.getElementById('packageGrid');
+            grid.innerHTML = '';
+            packages[currentLanguage].forEach(pkg => {
+                const card = document.createElement('div');
+                card.className = 'package-card';
+                card.onclick = () => selectPackage(pkg, card);
+                card.innerHTML = `
+                    ${pkg.badge ? `<span class="badge">${pkg.badge}</span>` : ''}
+                    <div class="package-title">${pkg.name}</div>
+                    <div class="package-price">${pkg.price} ฿</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        function selectPackage(pkg, cardElement) {
+            selectedPackage = pkg;
+            selectedAddon = null;
+            document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+            cardElement.classList.add('selected');
+            document.getElementById('addonSection').classList.remove('hidden');
+            renderAddons(pkg.size);
+            updatePriceSummary();
+        }
+        
+        function renderAddons(packageSize) {
+            const container = document.getElementById('addonOptions');
+            container.innerHTML = '';
+            addons[currentLanguage].filter(a => a.size === packageSize).forEach(addon => {
+                const card = document.createElement('div');
+                card.className = 'addon-card';
+                card.onclick = () => selectAddon(addon, card);
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>${addon.name}</span>
+                        <span style="font-weight: 700; color: #667eea;">+${addon.price} ฿</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function selectAddon(addon, cardElement) {
+            if (selectedAddon?.id === addon.id) {
+                selectedAddon = null;
+                cardElement.classList.remove('selected');
+            } else {
+                selectedAddon = addon;
+                document.querySelectorAll('.addon-card').forEach(c => c.classList.remove('selected'));
+                cardElement.classList.add('selected');
+            }
+            updatePriceSummary();
+        }
+        
+        function updatePriceSummary() {
+            if (!selectedPackage) return;
+            document.getElementById('priceSummary').classList.remove('hidden');
+            const total = selectedPackage.price + (selectedAddon ? selectedAddon.price : 0);
+            document.getElementById('summaryPackagePrice').textContent = selectedPackage.price + ' ฿';
+            document.getElementById('addonRow').classList.toggle('hidden', !selectedAddon);
+            if (selectedAddon) {
+                document.getElementById('summaryAddonPrice').textContent = '+' + selectedAddon.price + ' ฿';
+            }
+            document.getElementById('summaryTotalPrice').textContent = total + ' ฿';
+        }
+        
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                uploadedImageBase64 = e.target.result;
+                document.getElementById('imagePreview').src = uploadedImageBase64;
+                document.getElementById('imagePreview').classList.remove('hidden');
+                document.getElementById('uploadText').textContent = '✓ เลือกรูปแล้ว';
+            };
+            reader.readAsDataURL(file);
         }
     </script>
 </body>
