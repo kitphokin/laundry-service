@@ -759,16 +759,91 @@
             showSection('errorSection');
         }
         
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if ((lang === 'th' && btn.textContent === 'ไทย') || 
-                    (lang === 'en' && btn.textContent === 'English')) {
-                    btn.classList.add('active');
-                }
-            });
+        function setLanguage(newLang) {
+    currentLanguage = newLang;
+    
+    // อัพเดทปุ่มภาษา
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if ((newLang === 'th' && btn.textContent === 'ไทย') || 
+            (newLang === 'en' && btn.textContent === 'English')) {
+            btn.classList.add('active');
         }
+    });
+    
+    // อัพเดทข้อความทั้งหมด
+    updateLanguage();
+}
+
+function updateLanguage() {
+    const l = lang[currentLanguage];
+    
+    // อัพเดทข้อความหลัก
+    document.getElementById('mainTitle').textContent = l.mainTitle;
+    document.getElementById('subtitle').textContent = l.subtitle;
+    document.getElementById('registerTitle').textContent = l.registerTitle;
+    document.getElementById('labelRoomNumber').textContent = l.labelRoomNumber;
+    document.getElementById('labelLocationName').textContent = l.labelLocationName;
+    document.getElementById('labelLocationType').textContent = l.labelLocationType;
+    document.getElementById('labelLocation').textContent = l.labelLocation;
+    document.getElementById('btnGetLocation').textContent = l.btnGetLocation;
+    document.getElementById('labelPickupPoint').textContent = l.labelPickupPoint;
+    document.getElementById('btnRegister').textContent = l.btnRegister;
+    document.getElementById('serviceTitle').textContent = l.serviceTitle;
+    document.getElementById('instructionsTitle').textContent = l.instructionsTitle;
+    document.getElementById('labelServiceType').textContent = l.labelServiceType;
+    document.getElementById('packageTitle').textContent = l.packageTitle;
+    document.getElementById('addonTitle').textContent = l.addonTitle;
+    document.getElementById('perpieceText').textContent = l.perpieceText;
+    document.getElementById('summaryPackage').textContent = l.summaryPackage;
+    document.getElementById('summaryAddon').textContent = l.summaryAddon;
+    document.getElementById('summaryTotal').textContent = l.summaryTotal;
+    document.getElementById('labelImage').textContent = l.labelImage;
+    document.getElementById('uploadText').textContent = l.uploadText;
+    document.getElementById('labelNotes').textContent = l.labelNotes;
+    document.getElementById('btnSubmit').textContent = l.btnSubmit;
+    document.getElementById('successTitle').textContent = l.successTitle;
+    document.getElementById('successMessage').textContent = l.successMessage;
+    document.getElementById('btnClose').textContent = l.btnClose;
+    
+    // อัพเดท Service Type options
+    const serviceTypeSelect = document.getElementById('serviceType');
+    if (serviceTypeSelect) {
+        const currentValue = serviceTypeSelect.value;
+        serviceTypeSelect.innerHTML = `
+            <option value="">-- ${currentLanguage === 'th' ? 'เลือกประเภทบริการ' : 'Select Service Type'} --</option>
+            <option value="package">${currentLanguage === 'th' ? 'แบบ Package' : 'Package'}</option>
+            <option value="perpiece">${currentLanguage === 'th' ? 'แบบรายชิ้น' : 'Per Piece'}</option>
+        `;
+        serviceTypeSelect.value = currentValue; // คืนค่าเดิม
+    }
+    
+    // อัพเดท Instructions List
+    const instructionsList = document.getElementById('instructionsList');
+    if (instructionsList) {
+        if (currentLanguage === 'th') {
+            instructionsList.innerHTML = `
+                <li>เตรียมไม้แขวนเสื้อ สำหรับเสื้อผ้าที่ต้องการให้แขวน</li>
+                <li>หากต้องการให้พับ ไม่ต้องเตรียมไม้แขวน</li>
+                <li>ถุงคลุมผ้าที่มีหมายเลขห้องสามารถใส่ผ้าใช้แล้วส่งกลับได้</li>
+            `;
+        } else {
+            instructionsList.innerHTML = `
+                <li>Prepare hangers for clothes you want hung</li>
+                <li>If you want folded, no hangers needed</li>
+                <li>You can reuse the plastic bag with your room number</li>
+            `;
+        }
+    }
+    
+    // อัพเดท Packages และ Addons ถ้ามีการแสดงอยู่
+    if (!document.getElementById('packageOptions').classList.contains('hidden')) {
+        renderPackages();
+        if (selectedPackage) {
+            renderAddons(selectedPackage.size);
+        }
+    }
+}
         
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
