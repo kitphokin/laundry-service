@@ -2,10 +2,33 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ใช้บริการซักรีด</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Serisuk Laundry Service</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
+        /* ==========================================
+           Modern Thai Laundry Service Design
+           Theme: Clean, Professional, Trust-worthy
+           Colors: Fresh Blue + Clean White
+        ========================================== */
+        
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Lexend:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --primary-light: #06b6d4;
+            --secondary: #f0f9ff;
+            --accent: #0ea5e9;
+            --text-dark: #0f172a;
+            --text-light: #64748b;
+            --success: #10b981;
+            --error: #ef4444;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -13,462 +36,515 @@
         }
         
         body {
-            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
+            font-family: 'Prompt', 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--text-dark);
             min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
         }
         
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
             background: white;
             border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .header h1 {
-            color: #667eea;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .lang-switch {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            padding: 4px;
+            box-shadow: var(--shadow);
         }
         
         .lang-btn {
-            padding: 8px 20px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 20px;
-            cursor: pointer;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
             font-size: 14px;
-            transition: all 0.3s;
+            font-weight: 500;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Lexend', sans-serif;
         }
         
         .lang-btn.active {
-            background: #667eea;
+            background: var(--primary);
             color: white;
         }
         
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 80px 20px 40px;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .header-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 40px;
+            box-shadow: var(--shadow-lg);
+            animation: bounce 1s ease infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+        
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 20px;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Prompt', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+        }
+        
+        /* Package Selection */
+        .package-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .package-item {
+            position: relative;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .package-item:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .package-item.selected {
+            border-color: var(--primary);
+            background: var(--secondary);
+        }
+        
+        .package-item input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .package-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .package-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .package-item.selected .package-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .package-checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+        
+        .package-item.selected .package-checkbox::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .package-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-dark);
+            flex: 1;
+        }
+        
+        .delete-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: #fee2e2;
+            color: var(--error);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            background: var(--error);
+            color: white;
+        }
+        
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Prompt', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--secondary);
+        }
+        
+        /* Location Button */
+        .location-btn {
+            background: white;
+            border: 2px dashed var(--primary);
+            color: var(--primary);
+            margin-top: 12px;
+        }
+        
+        .location-btn:hover {
+            background: var(--secondary);
+            border-style: solid;
+        }
+        
+        .location-status {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: var(--secondary);
+            color: var(--primary-dark);
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .location-status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Section Display */
         .section {
-            margin-bottom: 25px;
             display: none;
         }
         
         .section.active {
             display: block;
-            animation: fadeIn 0.5s;
+            animation: slideIn 0.5s ease;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: border 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .package-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .package-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .package-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-        
-        .package-card.selected {
-            border-color: #667eea;
-            background: #f0f4ff;
-        }
-        
-        .package-card .badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ff6b6b;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-        }
-        
-        .package-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .package-price {
-            font-size: 20px;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-        
-        .addon-options {
-            margin-top: 15px;
-        }
-        
-        .addon-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .addon-card.selected {
-            border-color: #667eea;
-            background: #f0f4ff;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-        
-        .instructions {
-            background: #fff9e6;
-            border-left: 4px solid #ffd700;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .instructions h3 {
-            color: #d4a017;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        
-        .instructions ul {
-            margin-left: 20px;
-            color: #666;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-        
-        .image-upload {
-            border: 2px dashed #667eea;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .image-upload:hover {
-            background: #f0f4ff;
-        }
-        
-        .image-upload img {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        
-        .price-summary {
-            background: #f8f9ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        
-        .price-total {
-            border-top: 2px solid #667eea;
-            padding-top: 15px;
-            margin-top: 15px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 20px;
-            font-weight: 700;
-            color: #667eea;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-        }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .success-message {
-            text-align: center;
-            padding: 40px 20px;
-        }
-        
+        /* Success Animation */
         .success-icon {
-            font-size: 60px;
-            color: #4caf50;
-            margin-bottom: 20px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 48px;
+            animation: scaleIn 0.5s ease;
         }
         
-        .error-message {
-            background: #ffebee;
-            border-left: 4px solid #f44336;
-            padding: 15px;
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .success-text {
+            text-align: center;
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
             border-radius: 8px;
             margin: 20px 0;
-            color: #c62828;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #78350f;
         }
         
+        /* Current Packages Display */
+        .current-packages {
+            margin-bottom: 24px;
+        }
+        
+        .current-packages h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+            margin: 24px 0;
+        }
+        
+        /* Hidden class */
         .hidden {
             display: none !important;
         }
     </style>
 </head>
 <body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLanguage('th')">ไทย</button>
+        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1 id="mainTitle">ใช้บริการซักรีด</h1>
-            <p id="subtitle">เลือกบริการที่ต้องการ</p>
-        </div>
-        
-        <div class="lang-switch">
-            <button class="lang-btn active" onclick="setLanguage('th')">ไทย</button>
-            <button class="lang-btn" onclick="setLanguage('en')">English</button>
-        </div>
-        
-        <!-- Loading Screen -->
+        <!-- Loading Section -->
         <div id="loadingSection" class="section active">
             <div class="loading">
                 <div class="spinner"></div>
                 <p id="loadingText">กำลังโหลด...</p>
             </div>
         </div>
-        
-        <!-- Error Screen -->
-        <div id="errorSection" class="section">
-            <div class="error-message">
-                <h3>เกิดข้อผิดพลาด</h3>
-                <p id="errorMessage"></p>
-                <button class="btn btn-primary" onclick="location.reload()">ลองอีกครั้ง</button>
+
+        <!-- Registration Section -->
+        <div id="registrationSection" class="section">
+            <div class="header">
+                <div class="header-icon">🧺</div>
+                <h1 id="regTitle">ลงทะเบียน</h1>
+                <p id="regSubtitle">กรุณากรอกข้อมูลของคุณ</p>
             </div>
-        </div>
-        
-        <!-- New Customer Registration -->
-        <div id="newCustomerSection" class="section">
-            <h2 id="registerTitle">ลงทะเบียนลูกค้าใหม่</h2>
-            
-            <div class="form-group">
-                <label id="labelRoomNumber">หมายเลขห้อง / เลขที่บ้าน *</label>
-                <input type="text" id="roomNumber">
-            </div>
-            
-            <div class="form-group">
-                <label id="labelLocationName">ชื่อคอนโด / หมู่บ้าน *</label>
-                <input type="text" id="locationName">
-            </div>
-            
-            <div class="form-group">
-                <label id="labelLocationType">ประเภท *</label>
-                <select id="locationType">
-                    <option value="condo">คอนโดมิเนียม / Condominium</option>
-                    <option value="village">หมู่บ้าน / Village</option>
-                    <option value="apartment">อพาร์ทเมนท์ / Apartment</option>
-                    <option value="house">บ้านเดี่ยว / House</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label id="labelLocation">แชร์โลเคชั่น *</label>
-                <button class="btn btn-secondary" onclick="getLocation()" id="btnGetLocation">
-                    📍 แชร์โลเคชั่นของฉัน
+
+            <div class="card">
+                <div class="form-group">
+                    <label id="labelRoomNumber">หมายเลขห้อง</label>
+                    <input type="text" id="roomNumber" placeholder="เช่น 123, A-101">
+                </div>
+
+                <div class="form-group">
+                    <label id="labelLocationName">ชื่อคอนโด/หมู่บ้าน</label>
+                    <input type="text" id="locationName" placeholder="เช่น เดอะ เบส แจ้งวัฒนะ">
+                </div>
+
+                <div class="form-group">
+                    <label id="labelLocationType">ประเภท</label>
+                    <select id="locationType">
+                        <option value="condo">คอนโดมิเนียม</option>
+                        <option value="village">หมู่บ้าน</option>
+                        <option value="apartment">อพาร์ตเมนต์</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label id="labelPickupPoint">จุดรับ-ส่งผ้า</label>
+                    <input type="text" id="pickupPoint" placeholder="เช่น หน้าประตูห้อง, ล็อบบี้">
+                </div>
+
+                <div class="form-group">
+                    <label id="labelSelectPackages">เลือก Package ที่ใช้บ่อย (เลือกได้หลายรายการ)</label>
+                    <div class="package-grid" id="packageGrid"></div>
+                </div>
+
+                <button class="btn btn-primary" onclick="registerCustomer()" id="btnRegister">
+                    <span>📝</span> <span id="btnRegisterText">ลงทะเบียน</span>
                 </button>
-                <p id="locationStatus" style="margin-top: 10px; color: #666; font-size: 14px;"></p>
             </div>
-            
-            <div class="form-group">
-                <label id="labelPickupPoint">จุดรับ-ส่งผ้า *</label>
-                <textarea id="pickupPoint" rows="3"></textarea>
-            </div>
-            
-            <button class="btn btn-primary" onclick="registerNewCustomer()" id="btnRegister">
-                ลงทะเบียน
-            </button>
         </div>
-        
-        <!-- Service Selection -->
-        <div id="serviceSection" class="section">
-            <h2 id="serviceTitle">เลือกบริการ</h2>
-            
-            <div class="instructions">
-                <h3 id="instructionsTitle">📋 วิธีการส่งผ้า</h3>
-                <ul id="instructionsList">
-                    <li>เตรียมไม้แขวนเสื้อ สำหรับเสื้อผ้าที่ต้องการให้แขวน</li>
-                    <li>หากต้องการให้พับ ไม่ต้องเตรียมไม้แขวน</li>
-                    <li>ถุงคลุมผ้าที่มีหมายเลขห้องสามารถใส่ผ้าใช้แล้วส่งกลับได้</li>
-                </ul>
+
+        <!-- Manage Packages Section -->
+        <div id="managePackagesSection" class="section">
+            <div class="header">
+                <div class="header-icon">📦</div>
+                <h1 id="manageTitle">จัดการ Package</h1>
+                <p id="manageSubtitle">เลือก Package ที่คุณต้องการใช้</p>
             </div>
-            
-            <div class="form-group">
-                <label id="labelServiceType">ประเภทบริการ *</label>
-                <select id="serviceType" onchange="updateServiceOptions()">
-                    <option value="">-- เลือกประเภทบริการ --</option>
-                    <option value="package">แบบ Package</option>
-                    <option value="perpiece">แบบรายชิ้น</option>
-                </select>
-            </div>
-            
-            <div id="packageOptions" class="hidden">
-                <h3 id="packageTitle">เลือก Package</h3>
-                <div class="package-grid" id="packageGrid"></div>
-                
-                <div id="addonSection" class="hidden">
-                    <h3 id="addonTitle" style="margin-top: 25px;">บริการเสริม (เลือกได้)</h3>
-                    <div class="addon-options" id="addonOptions"></div>
+
+            <div class="card">
+                <div class="current-packages" id="currentPackagesDiv">
+                    <h3 id="labelCurrentPackages">Package ปัจจุบัน:</h3>
+                    <div class="package-grid" id="currentPackagesGrid"></div>
                 </div>
+
+                <div class="section-divider"></div>
+
+                <h3 id="labelAddPackages" style="font-size: 16px; font-weight: 600; color: var(--text-dark); margin-bottom: 12px;">เพิ่ม Package ใหม่:</h3>
+                <div class="package-grid" id="newPackagesGrid"></div>
+
+                <button class="btn btn-primary" onclick="savePackages()" id="btnSave" style="margin-top: 24px;">
+                    <span>💾</span> <span id="btnSaveText">บันทึก</span>
+                </button>
             </div>
-            
-            <div id="perpieceNote" class="hidden">
-                <div class="instructions">
-                    <p id="perpieceText">สำหรับบริการแบบรายชิ้น ทางร้านจะคิดราคาตามจำนวนผ้าที่ส่งมาจริง ตามตารางอัตราค่าบริการ</p>
-                </div>
-            </div>
-            
-            <div id="priceSummary" class="price-summary hidden">
-                <div class="price-row">
-                    <span id="summaryPackage">Package:</span>
-                    <span id="summaryPackagePrice">0 ฿</span>
-                </div>
-                <div class="price-row hidden" id="addonRow">
-                    <span id="summaryAddon">บริการเสริม:</span>
-                    <span id="summaryAddonPrice">0 ฿</span>
-                </div>
-                <div class="price-total">
-                    <span id="summaryTotal">รวมทั้งหมด:</span>
-                    <span id="summaryTotalPrice">0 ฿</span>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label id="labelImage">ถ่ายรูปถุงผ้า *</label>
-                <div class="image-upload" onclick="document.getElementById('imageInput').click()">
-                    <p id="uploadText">📸 คลิกเพื่อถ่ายรูป</p>
-                    <input type="file" id="imageInput" accept="image/*" capture="environment" style="display: none;" onchange="handleImageSelect(event)">
-                    <img id="imagePreview" class="hidden">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label id="labelNotes">หมายเหตุเพิ่มเติม</label>
-                <textarea id="orderNotes" rows="3"></textarea>
-            </div>
-            
-            <button class="btn btn-primary" onclick="submitOrder()" id="btnSubmit">
-                ส่งคำสั่งซื้อ
-            </button>
         </div>
-        
-        <!-- Success -->
+
+        <!-- Success Section -->
         <div id="successSection" class="section">
-            <div class="success-message">
+            <div class="card" style="text-align: center;">
                 <div class="success-icon">✅</div>
-                <h2 id="successTitle">ส่งคำสั่งซื้อสำเร็จ!</h2>
-                <p id="successMessage" style="color: #666; margin: 20px 0;">
-                    ทางร้านจะติดต่อกลับเร็วๆ นี้
-                </p>
-                <p id="orderIdText" style="font-size: 14px; color: #999;"></p>
-                <button class="btn btn-primary" onclick="liff.closeWindow()" id="btnClose">
-                    ปิดหน้าต่าง
+                <h2 id="successTitle" style="margin-bottom: 12px;">สำเร็จ!</h2>
+                <p class="success-text" id="successMessage"></p>
+                <button class="btn btn-secondary" onclick="liff.closeWindow()" id="btnClose">
+                    <span id="btnCloseText">ปิดหน้าต่าง</span>
                 </button>
             </div>
         </div>
@@ -476,540 +552,416 @@
 
     <script>
         // ==========================================
-        // Configuration - แก้ไขตรงนี้
+        // Configuration
         // ==========================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwMPLoeJnhRQqu_bqQKys2vxSkkkISMIuD0otLGsons1oVm3NIgZHq-r1n4_1jl2FimKQ/exec';
         const LIFF_ID = '2008959129-6kAJzyzg';
-        
-        // Global Variables
-        let currentLanguage = 'th';
+        const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+        // ==========================================
+        // State
+        // ==========================================
         let userId = '';
         let displayName = '';
-        let isNewCustomer = true;
-        let customerData = {};
-        let selectedPackage = null;
-        let selectedAddon = null;
-        let latitude = null;
-        let longitude = null;
-        let uploadedImageBase64 = null;
-        
-        // Language Pack
+        let currentLanguage = 'th';
+        let customerData = null;
+        let selectedPackages = [];
+
+        // ==========================================
+        // Package Data
+        // ==========================================
+        const packageData = {
+            'wash_iron_50': { id: 'wash_iron_50', name_th: 'ซัก+รีด 50 ชิ้น', name_en: 'Wash+Iron 50 pcs' },
+            'wash_iron_100': { id: 'wash_iron_100', name_th: 'ซัก+รีด 100 ชิ้น', name_en: 'Wash+Iron 100 pcs' },
+            'iron_50': { id: 'iron_50', name_th: 'รีด 50 ชิ้น', name_en: 'Iron 50 pcs' },
+            'iron_100': { id: 'iron_100', name_th: 'รีด 100 ชิ้น', name_en: 'Iron 100 pcs' },
+            'wash_dry_50': { id: 'wash_dry_50', name_th: 'ซัก+อบ 50 ชิ้น', name_en: 'Wash+Dry 50 pcs' },
+            'wash_dry_100': { id: 'wash_dry_100', name_th: 'ซัก+อบ 100 ชิ้น', name_en: 'Wash+Dry 100 pcs' }
+        };
+
+        // ==========================================
+        // Language Translations
+        // ==========================================
         const lang = {
             th: {
-                mainTitle: 'ใช้บริการซักรีด',
-                subtitle: 'เลือกบริการที่ต้องการ',
-                loadingText: 'กำลังโหลด...',
-                registerTitle: 'ลงทะเบียนลูกค้าใหม่',
-                labelRoomNumber: 'หมายเลขห้อง / เลขที่บ้าน *',
-                placeholderRoomNumber: 'เช่น 123, A-456',
-                labelLocationName: 'ชื่อคอนโด / หมู่บ้าน *',
-                placeholderLocationName: 'เช่น เดอะ เบส แจ้งวัฒนะ',
-                labelLocationType: 'ประเภท *',
-                labelLocation: 'แชร์โลเคชั่น *',
-                btnGetLocation: '📍 แชร์โลเคชั่นของฉัน',
-                labelPickupPoint: 'จุดรับ-ส่งผ้า *',
-                placeholderPickupPoint: 'เช่น หน้าประตูห้อง, โต๊ะรับฝากของชั้น 1',
+                loading: 'กำลังโหลด...',
+                regTitle: 'ลงทะเบียน',
+                regSubtitle: 'กรุณากรอกข้อมูลของคุณ',
+                labelRoomNumber: 'หมายเลขห้อง',
+                labelLocationName: 'ชื่อคอนโด/หมู่บ้าน',
+                labelLocationType: 'ประเภท',
+                labelPickupPoint: 'จุดรับ-ส่งผ้า',
+                labelSelectPackages: 'เลือก Package ที่ใช้บ่อย (เลือกได้หลายรายการ)',
                 btnRegister: 'ลงทะเบียน',
-                serviceTitle: 'เลือกบริการ',
-                instructionsTitle: '📋 วิธีการส่งผ้า',
-                instruction1: 'เตรียมไม้แขวนเสื้อ สำหรับเสื้อผ้าที่ต้องการให้แขวน',
-                instruction2: 'หากต้องการให้พับ ไม่ต้องเตรียมไม้แขวน',
-                instruction3: 'ถุงคลุมผ้าที่มีหมายเลขห้องสามารถใส่ผ้าใช้แล้วส่งกลับได้',
-                labelServiceType: 'ประเภทบริการ *',
-                selectServiceType: '-- เลือกประเภทบริการ --',
-                packageType: 'แบบ Package',
-                perpieceType: 'แบบรายชิ้น',
-                packageTitle: 'เลือก Package',
-                addonTitle: 'บริการเสริม (เลือกได้)',
-                perpieceText: 'สำหรับบริการแบบรายชิ้น ทางร้านจะคิดราคาตามจำนวนผ้าที่ส่งมาจริง ตามตารางอัตราค่าบริการ',
-                summaryPackage: 'Package:',
-                summaryAddon: 'บริการเสริม:',
-                summaryTotal: 'รวมทั้งหมด:',
-                labelImage: 'ถ่ายรูปถุงผ้า *',
-                uploadText: '📸 คลิกเพื่อถ่ายรูป',
-                uploadedText: '✓ เลือกรูปแล้ว (คลิกเพื่อเปลี่ยน)',
-                labelNotes: 'หมายเหตุเพิ่มเติม',
-                placeholderNotes: 'ระบุรายละเอียดเพิ่มเติม (ถ้ามี)',
-                btnSubmit: 'ส่งคำสั่งซื้อ',
-                successTitle: 'ส่งคำสั่งซื้อสำเร็จ!',
-                successMessage: 'ทางร้านจะติดต่อกลับเร็วๆ นี้',
-                orderIdText: 'หมายเลขคำสั่งซื้อ:',
-                btnClose: 'ปิดหน้าต่าง'
+                manageTitle: 'จัดการ Package',
+                manageSubtitle: 'เลือก Package ที่คุณต้องการใช้',
+                labelCurrentPackages: 'Package ปัจจุบัน:',
+                labelAddPackages: 'เพิ่ม Package ใหม่:',
+                btnSave: 'บันทึก',
+                successTitle: 'สำเร็จ!',
+                successMessageReg: 'ลงทะเบียนสำเร็จ!\nกรุณาปิดหน้าต่างนี้และแชร์โลเคชั่นใน LINE Chat',
+                successMessagePackages: 'บันทึก Package สำเร็จ!',
+                btnClose: 'ปิดหน้าต่าง',
+                fillAllFields: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+                selectAtLeastOne: 'กรุณาเลือก Package อย่างน้อย 1 รายการ',
+                locationType: {
+                    condo: 'คอนโดมิเนียม',
+                    village: 'หมู่บ้าน',
+                    apartment: 'อพาร์ตเมนต์'
+                }
             },
             en: {
-                mainTitle: 'Laundry Service',
-                subtitle: 'Select your service',
-                loadingText: 'Loading...',
-                registerTitle: 'New Customer Registration',
-                labelRoomNumber: 'Room / House Number *',
-                placeholderRoomNumber: 'e.g. 123, A-456',
-                labelLocationName: 'Condo / Village Name *',
-                placeholderLocationName: 'e.g. The Base Chaengwattana',
-                labelLocationType: 'Type *',
-                labelLocation: 'Share Location *',
-                btnGetLocation: '📍 Share My Location',
-                labelPickupPoint: 'Pickup/Delivery Point *',
-                placeholderPickupPoint: 'e.g. Front door, Lobby desk floor 1',
+                loading: 'Loading...',
+                regTitle: 'Register',
+                regSubtitle: 'Please fill in your information',
+                labelRoomNumber: 'Room Number',
+                labelLocationName: 'Condo/Village Name',
+                labelLocationType: 'Type',
+                labelPickupPoint: 'Pickup Point',
+                labelSelectPackages: 'Select Frequently Used Packages (Multiple selection)',
                 btnRegister: 'Register',
-                serviceTitle: 'Select Service',
-                instructionsTitle: '📋 How to Send Laundry',
-                instruction1: 'Prepare hangers for clothes you want hung',
-                instruction2: 'If you want folded, no hangers needed',
-                instruction3: 'You can reuse the plastic bag with your room number',
-                labelServiceType: 'Service Type *',
-                selectServiceType: '-- Select Service Type --',
-                packageType: 'Package',
-                perpieceType: 'Per Piece',
-                packageTitle: 'Select Package',
-                addonTitle: 'Add-on Services (Optional)',
-                perpieceText: 'For per-piece service, charges are based on actual items according to our price list',
-                summaryPackage: 'Package:',
-                summaryAddon: 'Add-on:',
-                summaryTotal: 'Total:',
-                labelImage: 'Take Photo of Laundry Bag *',
-                uploadText: '📸 Click to Take Photo',
-                uploadedText: '✓ Photo selected (click to change)',
-                labelNotes: 'Additional Notes',
-                placeholderNotes: 'Specify additional details (if any)',
-                btnSubmit: 'Submit Order',
-                successTitle: 'Order Submitted!',
-                successMessage: 'We will contact you soon',
-                orderIdText: 'Order ID:',
-                btnClose: 'Close Window'
+                manageTitle: 'Manage Packages',
+                manageSubtitle: 'Select packages you want to use',
+                labelCurrentPackages: 'Current Packages:',
+                labelAddPackages: 'Add New Packages:',
+                btnSave: 'Save',
+                successTitle: 'Success!',
+                successMessageReg: 'Registration successful!\nPlease close this window and share your location in LINE Chat',
+                successMessagePackages: 'Packages saved successfully!',
+                btnClose: 'Close Window',
+                fillAllFields: 'Please fill in all fields',
+                selectAtLeastOne: 'Please select at least 1 package',
+                locationType: {
+                    condo: 'Condominium',
+                    village: 'Village',
+                    apartment: 'Apartment'
+                }
             }
         };
-        
-        // Package Data
-        const packages = {
-            th: [
-                { id: 'wash_iron_50', name: 'ซัก+รีด 50 ชิ้น', price: 800, size: 50, type: 'wash_iron' },
-                { id: 'wash_iron_100', name: 'ซัก+รีด 100 ชิ้น', price: 1600, size: 100, type: 'wash_iron', badge: 'แถมซักผ้านวมฟรี 1 ผืน' },
-                { id: 'iron_50', name: 'รีด 50 ชิ้น', price: 600, size: 50, type: 'iron' },
-                { id: 'iron_100', name: 'รีด 100 ชิ้น', price: 1180, size: 100, type: 'iron' },
-                { id: 'wash_dry_50', name: 'ซัก+อบ 50 ชิ้น', price: 450, size: 50, type: 'wash_dry' },
-                { id: 'wash_dry_100', name: 'ซัก+อบ 100 ชิ้น', price: 880, size: 100, type: 'wash_dry' }
-            ],
-            en: [
-                { id: 'wash_iron_50', name: 'Wash+Iron 50 pcs', price: 800, size: 50, type: 'wash_iron' },
-                { id: 'wash_iron_100', name: 'Wash+Iron 100 pcs', price: 1600, size: 100, type: 'wash_iron', badge: 'Free blanket wash' },
-                { id: 'iron_50', name: 'Iron Only 50 pcs', price: 600, size: 50, type: 'iron' },
-                { id: 'iron_100', name: 'Iron Only 100 pcs', price: 1180, size: 100, type: 'iron' },
-                { id: 'wash_dry_50', name: 'Wash+Dry 50 pcs', price: 450, size: 50, type: 'wash_dry' },
-                { id: 'wash_dry_100', name: 'Wash+Dry 100 pcs', price: 880, size: 100, type: 'wash_dry' }
-            ]
-        };
-        
-        // Add-on Data
-        const addons = {
-            th: [
-                { id: 'separate_50', name: 'ซักแยก (50 ชิ้น)', price: 150, size: 50 },
-                { id: 'separate_100', name: 'ซักแยก (100 ชิ้น)', price: 300, size: 100 },
-                { id: 'hand_wash_50', name: 'ซักมือ (50 ชิ้น)', price: 150, size: 50 },
-                { id: 'hand_wash_100', name: 'ซักมือ (100 ชิ้น)', price: 300, size: 100 },
-                { id: 'both_50', name: 'ซักแยก+ซักมือ (50 ชิ้น)', price: 250, size: 50 },
-                { id: 'both_100', name: 'ซักแยก+ซักมือ (100 ชิ้น)', price: 500, size: 100 }
-            ],
-            en: [
-                { id: 'separate_50', name: 'Separate Wash (50 pcs)', price: 150, size: 50 },
-                { id: 'separate_100', name: 'Separate Wash (100 pcs)', price: 300, size: 100 },
-                { id: 'hand_wash_50', name: 'Hand Wash (50 pcs)', price: 150, size: 50 },
-                { id: 'hand_wash_100', name: 'Hand Wash (100 pcs)', price: 300, size: 100 },
-                { id: 'both_50', name: 'Separate+Hand (50 pcs)', price: 250, size: 50 },
-                { id: 'both_100', name: 'Separate+Hand (100 pcs)', price: 500, size: 100 }
-            ]
-        };
-        
-        // Initialize LIFF
-        window.onload = function() {
-            console.log('Initializing LIFF...');
-            
-            liff.init({ liffId: LIFF_ID })
-                .then(() => {
-                    console.log('LIFF initialized');
-                    if (!liff.isLoggedIn()) {
-                        liff.login();
-                    } else {
-                        initializeApp();
-                    }
-                })
-                .catch((err) => {
-                    console.error('LIFF init failed:', err);
-                    showError('เกิดข้อผิดพลาดในการเชื่อมต่อ LINE');
-                });
-        };
-        
-        // API Call Function
-        async function callGoogleAPI(params) {
-            const queryParams = new URLSearchParams(params).toString();
-            const url = `${GAS_URL}?${queryParams}`;
-            
+
+        // ==========================================
+        // LIFF Initialization
+        // ==========================================
+        window.onload = async function() {
             try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    redirect: 'follow'
-                });
+                await liff.init({ liffId: LIFF_ID });
                 
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('API call error:', error);
-                throw error;
-            }
-        }
-        
-        async function initializeApp() {
-            try {
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+
                 const profile = await liff.getProfile();
                 userId = profile.userId;
                 displayName = profile.displayName;
-                console.log('Profile loaded:', displayName);
-                
-                const data = await callGoogleAPI({
+
+                // Check URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const mode = urlParams.get('mode');
+
+                // Check if customer exists
+                const customerCheck = await callAPI({
                     action: 'checkCustomer',
                     userId: userId
                 });
-                
-                console.log('Customer status:', data);
-                
-                if (data.success && data.data.isNewCustomer) {
-                    showSection('newCustomerSection');
-                } else if (data.success) {
-                    customerData = data.data.customerData;
-                    currentLanguage = customerData.language || 'th';
-                    setLanguage(currentLanguage);
-                    showSection('serviceSection');
+
+                if (customerCheck.data.isNewCustomer) {
+                    // New customer - show registration
+                    showSection('registrationSection');
+                    renderPackageGrid('packageGrid', []);
                 } else {
-                    showError('ไม่สามารถโหลดข้อมูลได้');
+                    customerData = customerCheck.data.customerData;
+                    currentLanguage = customerData.language || 'th';
+                    updateLanguageUI();
+                    
+                    if (mode === 'packages') {
+                        // Manage packages mode
+                        showManagePackages();
+                    } else {
+                        // Default: show registration for editing
+                        showSection('registrationSection');
+                        fillCustomerData();
+                    }
                 }
             } catch (error) {
-                console.error('Init error:', error);
-                showError('เกิดข้อผิดพลาด: ' + error.message);
+                console.error('LIFF init error:', error);
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+            }
+        };
+
+        // ==========================================
+        // Language Functions
+        // ==========================================
+        function setLanguage(langCode) {
+            currentLanguage = langCode;
+            updateLanguageUI();
+        }
+
+        function updateLanguageUI() {
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.lang-btn:nth-child(${currentLanguage === 'th' ? 1 : 2})`).classList.add('active');
+
+            // Update all text
+            const translations = lang[currentLanguage];
+            
+            document.getElementById('loadingText').textContent = translations.loading;
+            document.getElementById('regTitle').textContent = translations.regTitle;
+            document.getElementById('regSubtitle').textContent = translations.regSubtitle;
+            document.getElementById('labelRoomNumber').textContent = translations.labelRoomNumber;
+            document.getElementById('labelLocationName').textContent = translations.labelLocationName;
+            document.getElementById('labelLocationType').textContent = translations.labelLocationType;
+            document.getElementById('labelPickupPoint').textContent = translations.labelPickupPoint;
+            document.getElementById('labelSelectPackages').textContent = translations.labelSelectPackages;
+            document.getElementById('btnRegisterText').textContent = translations.btnRegister;
+            document.getElementById('manageTitle').textContent = translations.manageTitle;
+            document.getElementById('manageSubtitle').textContent = translations.manageSubtitle;
+            document.getElementById('labelCurrentPackages').textContent = translations.labelCurrentPackages;
+            document.getElementById('labelAddPackages').textContent = translations.labelAddPackages;
+            document.getElementById('btnSaveText').textContent = translations.btnSave;
+            document.getElementById('successTitle').textContent = translations.successTitle;
+            document.getElementById('btnCloseText').textContent = translations.btnClose;
+
+            // Update location type options
+            const locationType = document.getElementById('locationType');
+            locationType.options[0].text = translations.locationType.condo;
+            locationType.options[1].text = translations.locationType.village;
+            locationType.options[2].text = translations.locationType.apartment;
+
+            // Re-render package grids if visible
+            if (document.getElementById('packageGrid').children.length > 0) {
+                renderPackageGrid('packageGrid', selectedPackages);
+            }
+            if (document.getElementById('currentPackagesGrid').children.length > 0) {
+                const currentPkgs = customerData?.availablePackages?.split(',').filter(p => p.trim()) || [];
+                renderManagePackagesUI(currentPkgs);
             }
         }
-        
-        async function registerNewCustomer() {
+
+        // ==========================================
+        // UI Functions
+        // ==========================================
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function renderPackageGrid(gridId, currentlySelected) {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = '';
+
+            Object.values(packageData).forEach(pkg => {
+                const isSelected = currentlySelected.includes(pkg.id);
+                const pkgName = currentLanguage === 'th' ? pkg.name_th : pkg.name_en;
+
+                const item = document.createElement('div');
+                item.className = 'package-item' + (isSelected ? ' selected' : '');
+                item.innerHTML = `
+                    <input type="checkbox" id="${gridId}_${pkg.id}" ${isSelected ? 'checked' : ''}>
+                    <label class="package-label" for="${gridId}_${pkg.id}">
+                        <div class="package-checkbox"></div>
+                        <span class="package-name">${pkgName}</span>
+                    </label>
+                `;
+
+                item.addEventListener('click', function() {
+                    const checkbox = item.querySelector('input');
+                    checkbox.checked = !checkbox.checked;
+                    item.classList.toggle('selected');
+                    
+                    if (checkbox.checked) {
+                        if (!selectedPackages.includes(pkg.id)) {
+                            selectedPackages.push(pkg.id);
+                        }
+                    } else {
+                        selectedPackages = selectedPackages.filter(p => p !== pkg.id);
+                    }
+                });
+
+                grid.appendChild(item);
+            });
+
+            selectedPackages = currentlySelected;
+        }
+
+        function fillCustomerData() {
+            if (!customerData) return;
+
+            document.getElementById('roomNumber').value = customerData.roomNumber || '';
+            document.getElementById('locationName').value = customerData.locationName || '';
+            document.getElementById('locationType').value = customerData.locationType || 'condo';
+            document.getElementById('pickupPoint').value = customerData.pickupPoint || '';
+
+            const packages = customerData.availablePackages ? customerData.availablePackages.split(',').filter(p => p.trim()) : [];
+            renderPackageGrid('packageGrid', packages);
+        }
+
+        function showManagePackages() {
+            const currentPkgs = customerData.availablePackages ? customerData.availablePackages.split(',').filter(p => p.trim()) : [];
+            renderManagePackagesUI(currentPkgs);
+            showSection('managePackagesSection');
+        }
+
+        function renderManagePackagesUI(currentPkgs) {
+            const currentGrid = document.getElementById('currentPackagesGrid');
+            const newGrid = document.getElementById('newPackagesGrid');
+            
+            currentGrid.innerHTML = '';
+            newGrid.innerHTML = '';
+
+            // Current packages (with delete button)
+            if (currentPkgs.length > 0) {
+                currentPkgs.forEach(pkgId => {
+                    const pkg = packageData[pkgId];
+                    if (!pkg) return;
+
+                    const pkgName = currentLanguage === 'th' ? pkg.name_th : pkg.name_en;
+                    const item = document.createElement('div');
+                    item.className = 'package-item selected';
+                    item.innerHTML = `
+                        <label class="package-label">
+                            <div class="package-checkbox"></div>
+                            <span class="package-name">${pkgName}</span>
+                            <button class="delete-btn" onclick="removePackage('${pkgId}')">×</button>
+                        </label>
+                    `;
+                    currentGrid.appendChild(item);
+                });
+
+                document.getElementById('currentPackagesDiv').style.display = 'block';
+            } else {
+                document.getElementById('currentPackagesDiv').style.display = 'none';
+            }
+
+            // Available packages to add
+            Object.values(packageData).forEach(pkg => {
+                if (currentPkgs.includes(pkg.id)) return; // Skip already selected
+
+                const pkgName = currentLanguage === 'th' ? pkg.name_th : pkg.name_en;
+                const item = document.createElement('div');
+                item.className = 'package-item';
+                item.innerHTML = `
+                    <input type="checkbox" id="new_${pkg.id}">
+                    <label class="package-label" for="new_${pkg.id}">
+                        <div class="package-checkbox"></div>
+                        <span class="package-name">${pkgName}</span>
+                    </label>
+                `;
+
+                item.addEventListener('click', function() {
+                    const checkbox = item.querySelector('input');
+                    checkbox.checked = !checkbox.checked;
+                    item.classList.toggle('selected');
+                });
+
+                newGrid.appendChild(item);
+            });
+
+            selectedPackages = [...currentPkgs];
+        }
+
+        function removePackage(pkgId) {
+            selectedPackages = selectedPackages.filter(p => p !== pkgId);
+            renderManagePackagesUI(selectedPackages);
+        }
+
+        // ==========================================
+        // API Functions
+        // ==========================================
+        async function callAPI(params) {
+            const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
+            const response = await fetch(url);
+            return await response.json();
+        }
+
+        // ==========================================
+        // Registration
+        // ==========================================
+        async function registerCustomer() {
             const roomNumber = document.getElementById('roomNumber').value.trim();
             const locationName = document.getElementById('locationName').value.trim();
             const locationType = document.getElementById('locationType').value;
             const pickupPoint = document.getElementById('pickupPoint').value.trim();
-            
+
             if (!roomNumber || !locationName || !pickupPoint) {
-                alert(currentLanguage === 'th' ? 'กรุณากรอกข้อมูลให้ครบถ้วน' : 'Please fill in all required fields');
+                alert(lang[currentLanguage].fillAllFields);
                 return;
             }
-            
-            if (!latitude || !longitude) {
-                alert(currentLanguage === 'th' ? 'กรุณาแชร์โลเคชั่น' : 'Please share your location');
+
+            if (selectedPackages.length === 0) {
+                alert(lang[currentLanguage].selectAtLeastOne);
                 return;
             }
-            
+
             try {
                 showSection('loadingSection');
-                
-                const data = await callGoogleAPI({
+
+                const result = await callAPI({
                     action: 'registerCustomer',
-                    userId,
-                    displayName,
-                    roomNumber,
-                    locationName,
-                    locationType,
-                    latitude,
-                    longitude,
-                    pickupPoint,
-                    language: currentLanguage
+                    userId: userId,
+                    displayName: displayName,
+                    roomNumber: roomNumber,
+                    locationName: locationName,
+                    locationType: locationType,
+                    pickupPoint: pickupPoint,
+                    language: currentLanguage,
+                    packages: selectedPackages.join(',')
                 });
-                
-                if (data.success) {
-                    customerData = { roomNumber, locationName, locationType, pickupPoint };
-                    showSection('serviceSection');
-                } else {
-                    showError('เกิดข้อผิดพลาด: ' + data.message);
-                }
-            } catch (error) {
-                showError('เกิดข้อผิดพลาด: ' + error.message);
-            }
-        }
-        
-        async function submitOrder() {
-            const serviceType = document.getElementById('serviceType').value;
-            
-            if (!serviceType) {
-                alert(currentLanguage === 'th' ? 'กรุณาเลือกประเภทบริการ' : 'Please select service type');
-                return;
-            }
-            
-            if (serviceType === 'package' && !selectedPackage) {
-                alert(currentLanguage === 'th' ? 'กรุณาเลือก Package' : 'Please select a package');
-                return;
-            }
-            
-            if (!uploadedImageBase64) {
-                alert(currentLanguage === 'th' ? 'กรุณาถ่ายรูปถุงผ้า' : 'Please take a photo of your laundry bag');
-                return;
-            }
-            
-            try {
-                showSection('loadingSection');
-                
-                const data = await callGoogleAPI({
-                    action: 'submitOrder',
-                    userId,
-                    roomNumber: customerData.roomNumber,
-                    locationName: customerData.locationName,
-                    serviceType,
-                    packageType: selectedPackage ? selectedPackage.id : 'perpiece',
-                    addOnService: selectedAddon ? selectedAddon.id : '',
-                    totalPrice: selectedPackage ? (selectedPackage.price + (selectedAddon ? selectedAddon.price : 0)) : 0,
-                    imageUrl: uploadedImageBase64.substring(0, 500),
-                    notes: document.getElementById('orderNotes').value
-                });
-                
-                if (data.success) {
-                    document.getElementById('orderIdText').textContent = 
-                        lang[currentLanguage].orderIdText + ' ' + data.data.orderId;
+
+                if (result.success) {
+                    document.getElementById('successMessage').textContent = lang[currentLanguage].successMessageReg;
                     showSection('successSection');
                 } else {
-                    showError('เกิดข้อผิดพลาด: ' + data.message);
+                    throw new Error(result.message);
                 }
             } catch (error) {
-                showError('เกิดข้อผิดพลาด: ' + error.message);
+                console.error('Registration error:', error);
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+                showSection('registrationSection');
             }
         }
-        
-        function showError(message) {
-            document.getElementById('errorMessage').textContent = message;
-            showSection('errorSection');
-        }
-        
-        function setLanguage(newLang) {
-            currentLanguage = newLang;
-            
-            // อัพเดทปุ่มภาษา
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if ((newLang === 'th' && btn.textContent === 'ไทย') || 
-                    (newLang === 'en' && btn.textContent === 'English')) {
-                    btn.classList.add('active');
-                }
+
+        // ==========================================
+        // Save Packages
+        // ==========================================
+        async function savePackages() {
+            // Get new packages from checkboxes
+            const newPackages = [];
+            document.querySelectorAll('#newPackagesGrid input[type="checkbox"]:checked').forEach(checkbox => {
+                const pkgId = checkbox.id.replace('new_', '');
+                newPackages.push(pkgId);
             });
-            
-            // อัพเดทข้อความทั้งหมด
-            updateLanguage();
-        }
-        
-        function updateLanguage() {
-            const l = lang[currentLanguage];
-            
-            // อัพเดทข้อความหลัก
-            document.getElementById('mainTitle').textContent = l.mainTitle;
-            document.getElementById('subtitle').textContent = l.subtitle;
-            document.getElementById('loadingText').textContent = l.loadingText;
-            document.getElementById('registerTitle').textContent = l.registerTitle;
-            document.getElementById('labelRoomNumber').textContent = l.labelRoomNumber;
-            document.getElementById('roomNumber').placeholder = l.placeholderRoomNumber;
-            document.getElementById('labelLocationName').textContent = l.labelLocationName;
-            document.getElementById('locationName').placeholder = l.placeholderLocationName;
-            document.getElementById('labelLocationType').textContent = l.labelLocationType;
-            document.getElementById('labelLocation').textContent = l.labelLocation;
-            document.getElementById('btnGetLocation').textContent = l.btnGetLocation;
-            document.getElementById('labelPickupPoint').textContent = l.labelPickupPoint;
-            document.getElementById('pickupPoint').placeholder = l.placeholderPickupPoint;
-            document.getElementById('btnRegister').textContent = l.btnRegister;
-            document.getElementById('serviceTitle').textContent = l.serviceTitle;
-            document.getElementById('instructionsTitle').textContent = l.instructionsTitle;
-            document.getElementById('labelServiceType').textContent = l.labelServiceType;
-            document.getElementById('packageTitle').textContent = l.packageTitle;
-            document.getElementById('addonTitle').textContent = l.addonTitle;
-            document.getElementById('perpieceText').textContent = l.perpieceText;
-            document.getElementById('summaryPackage').textContent = l.summaryPackage;
-            document.getElementById('summaryAddon').textContent = l.summaryAddon;
-            document.getElementById('summaryTotal').textContent = l.summaryTotal;
-            document.getElementById('labelImage').textContent = l.labelImage;
-            
-            // อัพเดท Upload Text (ถ้ายังไม่ได้อัพโหลดรูป)
-            if (!uploadedImageBase64) {
-                document.getElementById('uploadText').textContent = l.uploadText;
-            } else {
-                document.getElementById('uploadText').textContent = l.uploadedText;
+
+            const allPackages = [...selectedPackages, ...newPackages];
+
+            if (allPackages.length === 0) {
+                alert(lang[currentLanguage].selectAtLeastOne);
+                return;
             }
-            
-            document.getElementById('labelNotes').textContent = l.labelNotes;
-            document.getElementById('orderNotes').placeholder = l.placeholderNotes;
-            document.getElementById('btnSubmit').textContent = l.btnSubmit;
-            document.getElementById('successTitle').textContent = l.successTitle;
-            document.getElementById('successMessage').textContent = l.successMessage;
-            document.getElementById('btnClose').textContent = l.btnClose;
-            
-            // อัพเดท Service Type options
-            const serviceTypeSelect = document.getElementById('serviceType');
-            if (serviceTypeSelect) {
-                const currentValue = serviceTypeSelect.value;
-                serviceTypeSelect.innerHTML = `
-                    <option value="">${l.selectServiceType}</option>
-                    <option value="package">${l.packageType}</option>
-                    <option value="perpiece">${l.perpieceType}</option>
-                `;
-                serviceTypeSelect.value = currentValue;
-            }
-            
-            // อัพเดท Instructions List
-            const instructionsList = document.getElementById('instructionsList');
-            if (instructionsList) {
-                instructionsList.innerHTML = `
-                    <li>${l.instruction1}</li>
-                    <li>${l.instruction2}</li>
-                    <li>${l.instruction3}</li>
-                `;
-            }
-            
-            // อัพเดท Packages และ Addons ถ้ามีการแสดงอยู่
-            if (!document.getElementById('packageOptions').classList.contains('hidden')) {
-                renderPackages();
-                if (selectedPackage) {
-                    renderAddons(selectedPackage.size);
+
+            try {
+                showSection('loadingSection');
+
+                const result = await callAPI({
+                    action: 'updatePackages',
+                    userId: userId,
+                    packages: allPackages.join(',')
+                });
+
+                if (result.success) {
+                    document.getElementById('successMessage').textContent = lang[currentLanguage].successMessagePackages;
+                    showSection('successSection');
+                } else {
+                    throw new Error(result.message);
                 }
+            } catch (error) {
+                console.error('Save packages error:', error);
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+                showManagePackages();
             }
-        }
-        
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-        }
-        
-        function getLocation() {
-            if (navigator.geolocation) {
-                const statusText = currentLanguage === 'th' ? 'กำลังดึงตำแหน่ง...' : 'Getting location...';
-                document.getElementById('locationStatus').textContent = statusText;
-                
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        latitude = pos.coords.latitude;
-                        longitude = pos.coords.longitude;
-                        const successText = currentLanguage === 'th' 
-                            ? `✓ ตำแหน่ง: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
-                            : `✓ Location: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-                        document.getElementById('locationStatus').textContent = successText;
-                        document.getElementById('locationStatus').style.color = '#4caf50';
-                    },
-                    () => {
-                        const errorText = currentLanguage === 'th'
-                            ? '✗ ไม่สามารถดึงตำแหน่งได้'
-                            : '✗ Unable to get location';
-                        document.getElementById('locationStatus').textContent = errorText;
-                        document.getElementById('locationStatus').style.color = '#ff6b6b';
-                    }
-                );
-            }
-        }
-        
-        function updateServiceOptions() {
-            const serviceType = document.getElementById('serviceType').value;
-            document.getElementById('packageOptions').classList.toggle('hidden', serviceType !== 'package');
-            document.getElementById('perpieceNote').classList.toggle('hidden', serviceType !== 'perpiece');
-            document.getElementById('priceSummary').classList.add('hidden');
-            
-            if (serviceType === 'package') {
-                renderPackages();
-            }
-        }
-        
-        function renderPackages() {
-            const grid = document.getElementById('packageGrid');
-            grid.innerHTML = '';
-            
-            packages[currentLanguage].forEach(pkg => {
-                const card = document.createElement('div');
-                card.className = 'package-card';
-                if (selectedPackage && selectedPackage.id === pkg.id) {
-                    card.classList.add('selected');
-                }
-                card.onclick = () => selectPackage(pkg, card);
-                
-                card.innerHTML = `
-                    ${pkg.badge ? `<span class="badge">${pkg.badge}</span>` : ''}
-                    <div class="package-title">${pkg.name}</div>
-                    <div class="package-price">${pkg.price} ฿</div>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-        
-        function selectPackage(pkg, cardElement) {
-            selectedPackage = pkg;
-            selectedAddon = null;
-            
-            document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
-            cardElement.classList.add('selected');
-            
-            document.getElementById('addonSection').classList.remove('hidden');
-            renderAddons(pkg.size);
-            updatePriceSummary();
-        }
-        
-        function renderAddons(packageSize) {
-            const container = document.getElementById('addonOptions');
-            container.innerHTML = '';
-            
-            addons[currentLanguage].filter(a => a.size === packageSize).forEach(addon => {
-                const card = document.createElement('div');
-                card.className = 'addon-card';
-                if (selectedAddon && selectedAddon.id === addon.id) {
-                    card.classList.add('selected');
-                }
-                card.onclick = () => selectAddon(addon, card);
-                
-                card.innerHTML = `
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>${addon.name}</span>
-                        <span style="font-weight: 700; color: #667eea;">+${addon.price} ฿</span>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
-        
-        function selectAddon(addon, cardElement) {
-            if (selectedAddon && selectedAddon.id === addon.id) {
-                selectedAddon = null;
-                cardElement.classList.remove('selected');
-            } else {
-                selectedAddon = addon;
-                document.querySelectorAll('.addon-card').forEach(c => c.classList.remove('selected'));
-                cardElement.classList.add('selected');
-            }
-            updatePriceSummary();
-        }
-        
-        function updatePriceSummary() {
-            if (!selectedPackage) return;
-            
-            document.getElementById('priceSummary').classList.remove('hidden');
-            const total = selectedPackage.price + (selectedAddon ? selectedAddon.price : 0);
-            
-            document.getElementById('summaryPackagePrice').textContent = selectedPackage.price + ' ฿';
-            document.getElementById('addonRow').classList.toggle('hidden', !selectedAddon);
-            
-            if (selectedAddon) {
-                document.getElementById('summaryAddonPrice').textContent = '+' + selectedAddon.price + ' ฿';
-            }
-            
-            document.getElementById('summaryTotalPrice').textContent = total + ' ฿';
-        }
-        
-        function handleImageSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                uploadedImageBase64 = e.target.result;
-                document.getElementById('imagePreview').src = uploadedImageBase64;
-                document.getElementById('imagePreview').classList.remove('hidden');
-                document.getElementById('uploadText').textContent = lang[currentLanguage].uploadedText;
-            };
-            reader.readAsDataURL(file);
         }
     </script>
 </body>
