@@ -144,55 +144,6 @@
             border-radius: 12px;
             font-size: 11px;
         }
-        /* Package Card with Checkbox Style - Updated for Multi-Selection */
-        .package-card {
-            position: relative;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-        
-        .package-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-            transform: translateY(-2px);
-        }
-        
-        .package-checkbox {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 22px;
-            height: 22px;
-            cursor: pointer;
-            accent-color: #667eea;
-            z-index: 10;
-        }
-        
-        .package-label {
-            cursor: pointer;
-            display: block;
-            padding-right: 35px;
-        }
-        
-        .package-card input[type="checkbox"]:checked + .package-label {
-            color: #667eea;
-        }
-        
-        .package-card input[type="checkbox"]:checked + .package-label .package-title {
-            color: #667eea;
-            font-weight: 600;
-        }
-        
-        /* Highlight selected card */
-        .package-card:has(input[type="checkbox"]:checked) {
-            border-color: #667eea;
-            background: #f0f3ff;
-        }
-
         
         .package-title {
             font-size: 16px;
@@ -527,7 +478,7 @@
         // ==========================================
         // Configuration - แก้ไขตรงนี้
         // ==========================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbypXjGrpWfnDWWhrFbP_x0x3yd0OFAx4lxVeywHa41UWuAA_40wz0FWz_VF1mc8HTtuww/exec';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzJlIaNn04hzdb2s7KWtTDcwS_fS2Yu89eDr5r1V-o43Ls8HWwKwjAiEvA_eUEQ9WBg/exec';
         const LIFF_ID = '2008998734-1sLeZe9e';
         
         // Global Variables
@@ -536,8 +487,7 @@
         let displayName = '';
         let isNewCustomer = true;
         let customerData = {};
-        let selectedPackages = [];  // เปลี่ยนเป็น array สำหรับหลาย packages
-        let packagePreferences = [];  // เก็บ package preferences
+        let selectedPackage = null;
         let selectedAddon = null;
         let latitude = null;
         let longitude = null;
@@ -705,28 +655,6 @@
                 console.error('API call error:', error);
                 throw error;
             }
-
-        /**
-         * โหลด Package Preferences จาก Backend
-         */
-        async function loadPackagePreferences() {
-            try {
-                const data = await callGoogleAPI({
-                    action: 'getPackagePreferences',
-                    userId: userId
-                });
-                
-                if (data.success && data.data.packages && data.data.packages.length > 0) {
-                    packagePreferences = data.data.packages;
-                    console.log('Package preferences loaded:', packagePreferences);
-                    return packagePreferences;
-                }
-            } catch (error) {
-                console.log('No package preferences found or error:', error);
-            }
-            return [];
-        }
-
         }
         
         async function initializeApp() {
@@ -749,6 +677,13 @@
                     customerData = data.data.customerData;
                     currentLanguage = customerData.language || 'th';
                     setLanguage(currentLanguage);
+                    
+                    // เลือก Package ล่าสุดอัตโนมัติ (ถ้ามี)
+                    if (customerData.lastPackage) {
+                        console.log('Last package found:', customerData.lastPackage);
+                        autoSelectLastPackage(customerData.lastPackage, customerData.lastAddon, customerData.lastServiceType);
+                    }
+                    
                     showSection('serviceSection');
                 } else {
                     showError('ไม่สามารถโหลดข้อมูลได้');
@@ -812,8 +747,8 @@
                 return;
             }
             
-            if (serviceType === 'package' && selectedPackages.length === 0) {
-                alert(currentLanguage === 'th' ? 'กรุณาเลือก Package อย่างน้อย 1 รายการ' : 'Please select at least 1 package');
+            if (serviceType === 'package' && !selectedPackage) {
+                alert(currentLanguage === 'th' ? 'กรุณาเลือก Package' : 'Please select a package');
                 return;
             }
             
@@ -826,24 +761,15 @@
                 showSection('loadingSection');
                 
                 // ส่งคำสั่งซื้อ
-                // สร้าง array ของ package IDs
-                const packageIds = selectedPackages.map(pkg => pkg.id);
-                
-                // คำนวณราคารวม
-                const packageTotal = selectedPackages.reduce((sum, pkg) => sum + pkg.price, 0);
-                const addonPrice = selectedAddon ? selectedAddon.price : 0;
-                const totalPrice = packageTotal + addonPrice;
-                
                 const data = await callGoogleAPI({
                     action: 'submitOrder',
                     userId,
                     roomNumber: customerData.roomNumber,
                     locationName: customerData.locationName,
                     serviceType,
-                    packages: JSON.stringify(packageIds),
-                    packageType: packageIds.length > 0 ? packageIds[0] : 'perpiece',
+                    packageType: selectedPackage ? selectedPackage.id : 'perpiece',
                     addOnService: selectedAddon ? selectedAddon.id : '',
-                    totalPrice: serviceType === 'package' ? totalPrice : 0,
+                    totalPrice: selectedPackage ? (selectedPackage.price + (selectedAddon ? selectedAddon.price : 0)) : 0,
                     imageUrl: uploadedImageBase64.substring(0, 500),
                     notes: document.getElementById('orderNotes').value
                 });
@@ -1012,66 +938,11 @@
             grid.innerHTML = '';
             
             packages[currentLanguage].forEach(pkg => {
-                // เช็คว่า package นี้อยู่ใน preferences หรือไม่
-                const isPreferred = packagePreferences.includes(pkg.id);
-                
-                // ถ้าเป็น preferred ให้เพิ่มเข้า selectedPackages
-                if (isPreferred && !selectedPackages.find(p => p.id === pkg.id)) {
-                    selectedPackages.push(pkg);
-                }
-                
-
-        
-        /**
-         * Toggle Package Selection
-         */
-        function togglePackage(pkg) {
-            const checkbox = document.getElementById('pkg_' + pkg.id);
-            
-            if (checkbox.checked) {
-                // เพิ่ม package ถ้ายังไม่มี
-                if (!selectedPackages.find(p => p.id === pkg.id)) {
-                    selectedPackages.push(pkg);
-                }
-            } else {
-                // ลบ package ออก
-                selectedPackages = selectedPackages.filter(p => p.id !== pkg.id);
-            }
-            
-            console.log('Selected packages:', selectedPackages.map(p => p.id));
-            updatePriceSummary();
-        }
                 const card = document.createElement('div');
                 card.className = 'package-card';
-                
-                // เพิ่ม checkbox
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = 'pkg_' + pkg.id;
-                checkbox.className = 'package-checkbox';
-                checkbox.checked = isPreferred;
-                checkbox.onchange = () => togglePackage(pkg);
-                
-                const label = document.createElement('label');
-                label.htmlFor = 'pkg_' + pkg.id;
-                label.className = 'package-label';
-                
-                label.innerHTML = `
-                    ${pkg.badge ? `<span class="badge">${pkg.badge}</span>` : ''}
-                    <div class="package-title">${pkg.name}</div>
-                    <div class="package-price">${pkg.price} ฿</div>
-                `;
-                
-                card.appendChild(checkbox);
-                card.appendChild(label);
-                grid.appendChild(card);
-            });
-            
-            // อัพเดทราคาถ้ามี preferred packages
-            if (selectedPackages.length > 0) {
-                updatePriceSummary();
-            }
-        }
+                if (selectedPackage && selectedPackage.id === pkg.id) {
+                    card.classList.add('selected');
+                }
                 card.onclick = () => selectPackage(pkg, card);
                 
                 card.innerHTML = `
@@ -1084,7 +955,17 @@
             });
         }
         
-        
+        function selectPackage(pkg, cardElement) {
+            selectedPackage = pkg;
+            selectedAddon = null;
+            
+            document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+            cardElement.classList.add('selected');
+            
+            document.getElementById('addonSection').classList.remove('hidden');
+            renderAddons(pkg.size);
+            updatePriceSummary();
+        }
         
         function renderAddons(packageSize) {
             const container = document.getElementById('addonOptions');
@@ -1122,46 +1003,17 @@
         }
         
         function updatePriceSummary() {
-            const priceSummary = document.getElementById('priceSummary');
-            const addonRow = document.getElementById('addonRow');
+            if (!selectedPackage) return;
             
-            if (selectedPackages.length === 0) {
-                priceSummary.classList.add('hidden');
-                document.getElementById('addonSection').classList.add('hidden');
-                return;
+            document.getElementById('priceSummary').classList.remove('hidden');
+            const total = selectedPackage.price + (selectedAddon ? selectedAddon.price : 0);
+            
+            document.getElementById('summaryPackagePrice').textContent = selectedPackage.price + ' ฿';
+            document.getElementById('addonRow').classList.toggle('hidden', !selectedAddon);
+            
+            if (selectedAddon) {
+                document.getElementById('summaryAddonPrice').textContent = '+' + selectedAddon.price + ' ฿';
             }
-            
-            priceSummary.classList.remove('hidden');
-            document.getElementById('addonSection').classList.remove('hidden');
-            
-            // คำนวณราคา packages
-            const packageTotal = selectedPackages.reduce((sum, pkg) => sum + pkg.price, 0);
-            
-            // แสดงรายการ packages
-            let packageText = '';
-            if (selectedPackages.length === 1) {
-                packageText = selectedPackages[0].name;
-            } else {
-                packageText = `${selectedPackages.length} ${currentLanguage === 'th' ? 'แพ็กเกจ' : 'packages'}`;
-            }
-            
-            document.getElementById('summaryPackage').textContent = 
-                currentLanguage === 'th' ? 'Package:' : 'Package:';
-            document.getElementById('summaryPackagePrice').textContent = packageTotal + ' ฿';
-            
-            // คำนวณ addon
-            const addonPrice = selectedAddon ? selectedAddon.price : 0;
-            if (addonPrice > 0) {
-                addonRow.classList.remove('hidden');
-                document.getElementById('summaryAddonPrice').textContent = addonPrice + ' ฿';
-            } else {
-                addonRow.classList.add('hidden');
-            }
-            
-            // คำนวณยอดรวม
-            const totalPrice = packageTotal + addonPrice;
-            document.getElementById('summaryTotalPrice').textContent = totalPrice + ' ฿';
-        }
             
             document.getElementById('summaryTotalPrice').textContent = total + ' ฿';
         }
@@ -1178,6 +1030,66 @@
                 document.getElementById('uploadText').textContent = lang[currentLanguage].uploadedText;
             };
             reader.readAsDataURL(file);
+        }
+        
+        /**
+         * เลือก Package ล่าสุดอัตโนมัติ
+         */
+        function autoSelectLastPackage(lastPackageId, lastAddonId, lastServiceType) {
+            console.log('Auto-selecting package:', lastPackageId, lastAddonId, lastServiceType);
+            
+            // ตั้งค่า Service Type
+            if (lastServiceType) {
+                const serviceTypeSelect = document.getElementById('serviceType');
+                serviceTypeSelect.value = lastServiceType;
+                
+                // แสดง Package Options ถ้าเป็น package
+                if (lastServiceType === 'package') {
+                    document.getElementById('packageOptions').classList.remove('hidden');
+                    document.getElementById('perpieceSection').classList.add('hidden');
+                    
+                    // รอให้ packages render ก่อน แล้วค่อยเลือก
+                    setTimeout(() => {
+                        // หา Package ที่ตรงกับ lastPackageId
+                        const packageToSelect = packages[currentLanguage].find(p => p.id === lastPackageId);
+                        
+                        if (packageToSelect) {
+                            // หา element ของ package card
+                            const packageCards = document.querySelectorAll('.package-card');
+                            packageCards.forEach((card, index) => {
+                                const pkg = packages[currentLanguage][index];
+                                if (pkg && pkg.id === lastPackageId) {
+                                    // เลือก package
+                                    selectPackage(pkg, card);
+                                    
+                                    // scroll ไปที่ package ที่เลือก
+                                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                    
+                                    // ถ้ามี addon ให้เลือก addon ด้วย
+                                    if (lastAddonId) {
+                                        setTimeout(() => {
+                                            const addonToSelect = addons[currentLanguage].find(a => 
+                                                a.id === lastAddonId && a.size === packageToSelect.size
+                                            );
+                                            
+                                            if (addonToSelect) {
+                                                const addonCards = document.querySelectorAll('.addon-card');
+                                                addonCards.forEach((addonCard, addonIndex) => {
+                                                    const availableAddons = addons[currentLanguage].filter(a => a.size === packageToSelect.size);
+                                                    const addon = availableAddons[addonIndex];
+                                                    if (addon && addon.id === lastAddonId) {
+                                                        selectAddon(addon, addonCard);
+                                                    }
+                                                });
+                                            }
+                                        }, 300);
+                                    }
+                                }
+                            });
+                        }
+                    }, 100);
+                }
+            }
         }
     </script>
 </body>
