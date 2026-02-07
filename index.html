@@ -678,13 +678,16 @@
                     currentLanguage = customerData.language || 'th';
                     setLanguage(currentLanguage);
                     
-                    // เลือก Package ล่าสุดอัตโนมัติ (ถ้ามี)
-                    if (customerData.lastPackage) {
-                        console.log('Last package found:', customerData.lastPackage);
-                        autoSelectLastPackage(customerData.lastPackage, customerData.lastAddon, customerData.lastServiceType);
-                    }
-                    
                     showSection('serviceSection');
+                    
+                    // รอให้หน้า service section แสดงก่อน แล้วค่อยเลือก package
+                    setTimeout(() => {
+                        // เลือก Package ล่าสุดอัตโนมัติ (ถ้ามี)
+                        if (customerData.lastPackage) {
+                            console.log('Last package found:', customerData.lastPackage);
+                            autoSelectLastPackage(customerData.lastPackage, customerData.lastAddon, customerData.lastServiceType);
+                        }
+                    }, 300);
                 } else {
                     showError('ไม่สามารถโหลดข้อมูลได้');
                 }
@@ -1041,14 +1044,29 @@
             // ตั้งค่า Service Type
             if (lastServiceType) {
                 const serviceTypeSelect = document.getElementById('serviceType');
+                if (!serviceTypeSelect) {
+                    console.error('serviceType element not found');
+                    return;
+                }
+                
                 serviceTypeSelect.value = lastServiceType;
                 
                 // แสดง Package Options ถ้าเป็น package
                 if (lastServiceType === 'package') {
-                    document.getElementById('packageOptions').classList.remove('hidden');
-                    document.getElementById('perpieceSection').classList.add('hidden');
+                    const packageOptions = document.getElementById('packageOptions');
+                    const perpieceSection = document.getElementById('perpieceNote');
                     
-                    // รอให้ packages render ก่อน แล้วค่อยเลือก
+                    if (packageOptions) {
+                        packageOptions.classList.remove('hidden');
+                    }
+                    if (perpieceSection) {
+                        perpieceSection.classList.add('hidden');
+                    }
+                    
+                    // Render packages ก่อน
+                    renderPackages();
+                    
+                    // รอให้ packages render เสร็จ แล้วค่อยเลือก
                     setTimeout(() => {
                         // หา Package ที่ตรงกับ lastPackageId
                         const packageToSelect = packages[currentLanguage].find(p => p.id === lastPackageId);
@@ -1056,6 +1074,12 @@
                         if (packageToSelect) {
                             // หา element ของ package card
                             const packageCards = document.querySelectorAll('.package-card');
+                            
+                            if (packageCards.length === 0) {
+                                console.error('No package cards found');
+                                return;
+                            }
+                            
                             packageCards.forEach((card, index) => {
                                 const pkg = packages[currentLanguage][index];
                                 if (pkg && pkg.id === lastPackageId) {
@@ -1063,7 +1087,9 @@
                                     selectPackage(pkg, card);
                                     
                                     // scroll ไปที่ package ที่เลือก
-                                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                    if (card && card.scrollIntoView) {
+                                        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                    }
                                     
                                     // ถ้ามี addon ให้เลือก addon ด้วย
                                     if (lastAddonId) {
@@ -1074,20 +1100,23 @@
                                             
                                             if (addonToSelect) {
                                                 const addonCards = document.querySelectorAll('.addon-card');
-                                                addonCards.forEach((addonCard, addonIndex) => {
-                                                    const availableAddons = addons[currentLanguage].filter(a => a.size === packageToSelect.size);
-                                                    const addon = availableAddons[addonIndex];
-                                                    if (addon && addon.id === lastAddonId) {
-                                                        selectAddon(addon, addonCard);
-                                                    }
-                                                });
+                                                
+                                                if (addonCards.length > 0) {
+                                                    addonCards.forEach((addonCard, addonIndex) => {
+                                                        const availableAddons = addons[currentLanguage].filter(a => a.size === packageToSelect.size);
+                                                        const addon = availableAddons[addonIndex];
+                                                        if (addon && addon.id === lastAddonId) {
+                                                            selectAddon(addon, addonCard);
+                                                        }
+                                                    });
+                                                }
                                             }
                                         }, 300);
                                     }
                                 }
                             });
                         }
-                    }, 100);
+                    }, 200);
                 }
             }
         }
